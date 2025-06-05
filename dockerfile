@@ -17,6 +17,3 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
-
-# Command to run when container starts
-CMD ["sh", "-c", "python -m src.main"]
