@@ -1,0 +1,17 @@
+name: leaderboard-python
+
+services:
+  app:  
+    build:
+      context: .
+    volumes:
+      - ./src:/app/src
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app/src
