@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import Contestant, Submission
 
-# Register your models here.
+admin.site.register(Contestant)
+admin.site.register(Submission)
