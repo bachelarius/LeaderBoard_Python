@@ -6,7 +6,7 @@ services:
       context: .
     user: "1000:1000"
     volumes:
-      - ./src:/app/src
+      - ./src:/app
     container_name: leaderboard_app
     ports:
       - "8000:8000"
@@ -17,9 +17,10 @@ services:
       - DB_NAME=${DB_NAME:-leaderboard}
       - DB_USER=${DB_USER:-leaderboard_user}
       - DB_PASSWORD=${DB_PASSWORD:-CHANGE_ME_IN_.env}
+    working_dir: /app
     command: >
-      sh -c "python /app/src/manage.py migrate &&
-             python /app/src/manage.py runserver 0.0.0.0:8000"
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
     depends_on:
       leadeboard_db:
         condition: service_healthy
@@ -29,7 +30,6 @@ services:
     container_name: leadeboard_db
     restart: always
     environment:
-      - PYTHONPATH=/app
       - POSTGRES_USER=${DB_USER:-leaderboard_user}
       - POSTGRES_PASSWORD=${DB_PASSWORD:-CHANGE_ME_IN_.env}
       - POSTGRES_DB=${DB_NAME:-leaderboard}
