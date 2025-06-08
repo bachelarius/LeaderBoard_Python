@@ -17,8 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from upload.views import upload_json
+from display.views import display_scores
 
 urlpatterns = [
+    path('', display_scores, name="display_scores"),
     path('admin/', admin.site.urls),
     path('upload/', upload_json, name='upload_json'),
 ]

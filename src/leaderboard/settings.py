@@ -38,6 +38,7 @@ ALLOWED_HOSTS = ['0.0.0.0', 'localhost']
 INSTALLED_APPS = [
     'data.apps.DataConfig',
     'upload.apps.UploadConfig',
+    'display.apps.DisplayConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
