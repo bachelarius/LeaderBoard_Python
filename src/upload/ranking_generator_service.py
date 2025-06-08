@@ -14,7 +14,7 @@ class RankingGeneratorService:
 
     def generate_ranking(self, contestant_name:str) -> Optional[RankingDto]:
         contestant_submissions = self.query_service.fetch_submissions_for_contestant(contestant_name,  self.config.max_submissions)
-        if len(contestant_submissions) < self.config.min_submissions:
+        if len(contestant_submissions) >= self.config.min_submissions:
             total_score = 0
             for submission in contestant_submissions:
                 total_score += submission.score

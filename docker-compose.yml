@@ -25,7 +25,30 @@ services:
     depends_on:
       leadeboard_db:
         condition: service_healthy
-  
+
+  leaderboard_app_tests:
+    build:
+      context: .
+    user: "1000:1000"
+    volumes:
+      - ./src:/app
+    container_name: leaderboard_app_tests
+    environment:
+      - PYTHONPATH=/app
+      - DB_HOST=leadeboard_db
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-leaderboard} #TODO: Don't test on the same DB as leaderboard_app
+      - DB_USER=${DB_USER:-leaderboard_user}
+      - DB_PASSWORD=${DB_PASSWORD:-CHANGE_ME_IN_.env}
+    working_dir: /app
+    command: >
+      sh -c "python manage.py makemigrations &&
+             python manage.py migrate &&
+             python manage.py test"
+    depends_on:
+      leadeboard_db:
+        condition: service_healthy
+      
   leadeboard_db:
     image: postgres:17.5-alpine
     container_name: leadeboard_db
