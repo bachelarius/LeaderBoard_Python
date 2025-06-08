@@ -2,28 +2,34 @@
 <html>
 <head>
     <title>Rankings</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <h1>Rankings</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Contestant Name</th>
-                <th>Total Score</th>
-                <th>Latest Submission Date</th>
-                <th>Number of Submissions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for ranking in rankings %}
-            <tr>
-                <td>{{ ranking.contestant_name }}</td>
-                <td>{{ ranking.total_score }}</td>
-                <td>{{ ranking.latest_submission_date }}</td>
-                <td>{{ ranking.num_submissions_included }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="container">
+        <h1>Rankings</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Contestant Name</th>
+                    <th>Total Score</th>
+                    <th>Latest Submission Date</th>
+                    <th>Number of Submissions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ranking in rankings %}
+                <tr>
+                    <td>{{ ranking.contestant_name }}</td>
+                    <td>{{ ranking.total_score }}</td>
+                    <td>{{ ranking.latest_submission_date }}</td>
+                    <td>{{ ranking.num_submissions_included }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
