@@ -18,9 +18,7 @@ class Submission(models.Model):
     score = models.IntegerField()
 
     class Meta:
-        constraints = [
-            UniqueConstraint(fields=['contestant', 'competition', 'date'], name='unique_submission'),
-        ]
+        constraints = [UniqueConstraint(fields=['contestant', 'competition', 'date'], name='unique_submission')]
 
 class Ranking(models.Model):
     """Computed table for displaying the rankings of contestants"""
@@ -31,7 +29,7 @@ class Ranking(models.Model):
 
 class RankingSubmission(models.Model):
     """Join between rankings and submissions, to show exactly which submissions are included in a ranking"""
-    ranking = models.ForeignKey(Contestant, on_delete=models.CASCADE)
+    ranking = models.ForeignKey(Ranking, on_delete=models.CASCADE)
     submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
     class Meta:
         constraints = [
@@ -48,3 +46,15 @@ class SubmissionDto:
         self.competition_name=competition_name
         self.date=date
         self.score=score
+
+class RankingDto:
+    def __init__(self, contestant_name: str,
+                       total_score: int,
+                       latest_submission_date: date,
+                       num_submissions_included: int,
+                       submissions: list[SubmissionDto]):
+        self.contestant_name=contestant_name
+        self.total_score = total_score
+        self.latest_submission_date = latest_submission_date
+        self.num_submissions_included = num_submissions_included
+        self.submissions = submissions

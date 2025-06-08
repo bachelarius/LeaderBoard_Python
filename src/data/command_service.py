@@ -1,5 +1,5 @@
 from datetime import date
-from .models import Contestant, Competition, Submission, Ranking, RankingSubmission, SubmissionDto
+from .models import Contestant, Competition, RankingDto, Submission, Ranking, RankingSubmission, SubmissionDto
 
 class CommandService:
 
@@ -30,28 +30,23 @@ class CommandService:
         
         Submission.objects.bulk_create(to_upsert, ignore_conflicts=True)
 
-    def upsert_ranking(self, contestant_name: str,
-                             total_score: int,
-                             latest_submission_date: date,
-                             submissions: list[SubmissionDto]):
-        existing_contestant = Contestant.objects.get_or_create(name=contestant_name)
+    def upsert_ranking(self, ranking_data:RankingDto):
+        existing_contestant = Contestant.objects.get(name=ranking_data.contestant_name)
         
         #Remove existing Rankings, using cascade delete to deal with RankingSubmissions
         Ranking.objects.filter(contestant=existing_contestant).delete()
         
-        ranking, _ = Ranking.objects.get_or_create(contestant=existing_contestant,
-                                                   total_score=total_score,
-                                                   latest_submission_date=latest_submission_date,
-                                                   num_submissions_included=len(submissions))
-        ranking_submissions: list[RankingSubmission] = []
-        for submission in submissions:
+        new_ranking, _ = Ranking.objects.get_or_create(contestant=existing_contestant,
+                                                   total_score=ranking_data.total_score,
+                                                   latest_submission_date=ranking_data.latest_submission_date,
+                                                   num_submissions_included=ranking_data.num_submissions_included)
+        new_ranking_submissions: list[RankingSubmission] = []
+        for submission in ranking_data.submissions:
             existing_competition, _ = Competition.objects.get_or_create(name=submission.competition_name)
             existing_submission, _ = Submission.objects.get_or_create(contestant = existing_contestant,
                                                                       competition = existing_competition,
                                                                       date = submission.date,
                                                                       score = submission.score)
-            ranking_submissions.append(RankingSubmission(ranking=ranking,
-                                               submission=existing_submission
-            ))
+            new_ranking_submissions.append(RankingSubmission(ranking=new_ranking, submission=existing_submission))
 
-        RankingSubmission.objects.bulk_create(ranking_submissions)
+        RankingSubmission.objects.bulk_create(new_ranking_submissions)
