@@ -26,15 +26,15 @@ class Ranking(models.Model):
     total_score = models.IntegerField()
     latest_submission_date = models.DateField()
     num_submissions_included = models.IntegerField()
+    class Meta:
+        ordering = ['-total_score', '-num_submissions_included']
 
 class RankingSubmission(models.Model):
     """Join between rankings and submissions, to show exactly which submissions are included in a ranking"""
-    ranking = models.ForeignKey(Ranking, on_delete=models.CASCADE)
+    ranking = models.ForeignKey(Ranking, on_delete=models.CASCADE, related_name="ranking_submissions")
     submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
     class Meta:
-        constraints = [
-            UniqueConstraint(fields=['ranking', 'submission'], name='unique_ranking_submission'),
-        ]
+        constraints = [UniqueConstraint(fields=['ranking', 'submission'], name='unique_ranking_submission')]
 
 
 class SubmissionDto:

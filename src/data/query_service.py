@@ -9,16 +9,16 @@ class QueryService:
 
     def fetch_rankings(self) -> list[RankingDto]:
         ranking_data: list[RankingDto] = []
-        rankings = Ranking.objects.all().order_by('-total_score', '-num_submissions_included')
-        
+        rankings = Ranking.objects.all().select_related('contestant')
+
         for ranking in rankings:
             submissions = [
                 SubmissionDto(s.submission.contestant.name, s.submission.competition.name, s.submission.date, s.submission.score)
-                for s in RankingSubmission.objects.filter(ranking=ranking)
+                for s in RankingSubmission.objects.filter(ranking=ranking).select_related('submission__contestant', 'submission__competition')
             ]
-            ranking_data.append(RankingDto(contestant_name=ranking.contestant.name,
-                                           total_score=ranking.total_score,
-                                           latest_submission_date=ranking.latest_submission_date,
-                                           num_submissions_included=ranking.num_submissions_included,
-                                           submissions=submissions))
+            ranking_data.append(RankingDto(ranking.contestant.name,
+                                           ranking.total_score,
+                                           ranking.latest_submission_date,
+                                           ranking.num_submissions_included,
+                                           submissions))
         return ranking_data
