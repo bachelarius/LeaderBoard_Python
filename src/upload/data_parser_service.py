@@ -12,8 +12,8 @@ class DataParserService:
                     
                     date_object = datetime.strptime(submission_data['date'], '%d/%m/%Y')
 
-                    results.AddSubmission(contestant_name=contestant_data['name'], 
-                                          submission_name=submission_data['name'], 
+                    results.add_submission(contestant_name=contestant_data['name'], 
+                                          competition_name=submission_data['name'], 
                                           date=date_object.date(),
                                           score=submission_data['score'])
             return results

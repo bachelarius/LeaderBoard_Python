@@ -19,7 +19,8 @@ services:
       - DB_PASSWORD=${DB_PASSWORD:-CHANGE_ME_IN_.env}
     working_dir: /app
     command: >
-      sh -c "python manage.py migrate &&
+      sh -c "python manage.py makemigrations &&
+             python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
     depends_on:
       leadeboard_db:
@@ -38,7 +39,7 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "sh -c 'pg_isready -U ${DB_USER:-leaderboard_user} -d ${DB_NAME:-leaderboard}'"]
       interval: 10s
-      timeout: 3s
+      timeout: 3s 
       retries: 3
     volumes:
       - leaderboard_db_data:/var/lib/postgresql/data

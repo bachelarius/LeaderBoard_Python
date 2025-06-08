@@ -15,10 +15,11 @@ def upload_json(request,
             
             parsed = upload_service.parse_contestants_json(json_data)
 
-            for contestant_name in parsed.contestants_data:
-                command_service.UpsertSubmissions(contestant_name, list(parsed.contestants_data[contestant_name]))
+            command_service.upsert_contestants(list(parsed.contestants()))
+            command_service.upsert_competitions(list(parsed.competitions()))
+            command_service.upsert_submissions(list(parsed.submissions()))
 
-            return HttpResponse(f"Uploaded {len(parsed.contestants_data)} contestants.")
+            return HttpResponse(f"Uploaded {len(parsed.contestants())} contestants with {len(parsed.submissions())} across {len(parsed.competitions())} competitions.")
         
         except json.JSONDecodeError:
             response = HttpResponse("Invalid JSON file.")
