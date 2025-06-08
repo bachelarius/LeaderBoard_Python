@@ -26,8 +26,8 @@ class Ranking(models.Model):
     """Computed table for displaying the rankings of contestants"""
     contestant = models.OneToOneField(Contestant, on_delete=models.CASCADE)
     total_score = models.IntegerField()
-    num_submissions_included = models.IntegerField()
     latest_submission_date = models.DateField()
+    num_submissions_included = models.IntegerField()
 
 class RankingSubmission(models.Model):
     """Join between rankings and submissions, to show exactly which submissions are included in a ranking"""
