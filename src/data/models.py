@@ -7,7 +7,7 @@ class Contestant(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
 class Competition(models.Model):
-    """Names for the """
+    """Names for the competitions"""
     name = models.CharField(max_length=255, unique=True)
 
 class Submission(models.Model):
@@ -20,6 +20,22 @@ class Submission(models.Model):
     class Meta:
         constraints = [
             UniqueConstraint(fields=['contestant', 'competition', 'date'], name='unique_submission'),
+        ]
+
+class Ranking(models.Model):
+    """Computed table for displaying the rankings of contestants"""
+    contestant = models.OneToOneField(Contestant, on_delete=models.CASCADE)
+    total_score = models.IntegerField()
+    num_submissions_included = models.IntegerField()
+    latest_submission_date = models.DateField()
+
+class RankingSubmission(models.Model):
+    """Join between rankings and submissions, to show exactly which submissions are included in a ranking"""
+    ranking = models.ForeignKey(Contestant, on_delete=models.CASCADE)
+    submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['ranking', 'submission'], name='unique_ranking_submission'),
         ]
 
 
