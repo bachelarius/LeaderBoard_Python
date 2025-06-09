@@ -47,6 +47,8 @@ class CommandService:
                                                                       competition = existing_competition,
                                                                       date = submission.date,
                                                                       score = submission.score)
-            new_ranking_submissions.append(RankingSubmission(ranking=new_ranking, submission=existing_submission))
+            new_ranking_submissions.append(RankingSubmission(ranking=new_ranking, 
+                                                             submission=existing_submission, 
+                                                             submission_date=existing_submission.date))
 
         RankingSubmission.objects.bulk_create(new_ranking_submissions)

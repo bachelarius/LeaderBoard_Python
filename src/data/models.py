@@ -33,8 +33,10 @@ class RankingSubmission(models.Model):
     """Join between rankings and submissions, to show exactly which submissions are included in a ranking"""
     ranking = models.ForeignKey(Ranking, on_delete=models.CASCADE, related_name="ranking_submissions")
     submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
+    submission_date = models.DateField()
     class Meta:
         constraints = [UniqueConstraint(fields=['ranking', 'submission'], name='unique_ranking_submission')]
+        ordering = ['-submission_date']
 
 
 class SubmissionDto:
