@@ -12,63 +12,75 @@
     <div class="container">
         <div class="jumbotron">
             <h1 class="display-4">Rankings</h1>
+            <p class="lead">Take our challenges, submit your results and see how you fare against your fellow contestants!</p>
+            <hr class="my-4">
+            <ul>
+                <li>Users are ranked by the sum of their best submission scores</li>
+                <li>For each user, only scores from their best 24 submissions count</li>
+                <li>A user must have at least 3 submissions to appear in the rankings</li>
+            </ul>
         </div>
-        <table class="table table-striped">
-            <thead>
-                <tr class="text-center">
-                    <th></th>
-                    <th class="text-left">Contestant Name</th>
-                    <th>Total Score</th>
-                    <th>Latest Submission Date</th>
-                    <th>Number of Submissions</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for ranking in rankings %}
-                <tr class="text-center">
-                    <td class="text-left">
-                        {% if forloop.counter == 1 %}
-                            <i class="fas fa-medal" style="color: gold;"></i>
-                        {% elif forloop.counter == 2 %}
-                            <i class="fas fa-medal" style="color: silver;"></i>
-                        {% elif forloop.counter == 3 %}
-                            <i class="fas fa-medal" style="color: #cd7f32;"></i>
-                        {% else %}
-                            <span class="pl-1">{{ forloop.counter }}</span>
-                        {% endif %}
-                    </td>
-                    <td class="text-left">{{ ranking.contestant_name }}</td>
-                    <td>{{ ranking.total_score }}</td>
-                    <td>{{ ranking.latest_submission_date }}</td>
-                    <td>{{ ranking.num_submissions_included }}</td>
-                    <td class="text-right">
+        {% if not rankings %}
+            <p class="text-muted text-center">No submissions uploaded yet - <a href="{% url 'upload_json' %}">upload them here</a>.</p>
+        {% else %}
+            <table class="table table-striped">
+                <thead>
+                    <tr class="text-center">
+                        <th></th>
+                        <th class="text-left">Contestant Name</th>
+                        <th>Total Score</th>
+                        <th>Latest Submission Date</th>
+                        <th>Number of Submissions</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ranking in rankings %}
+                    <tr class="text-center">
+                        <td class="text-left">
+                            {% if forloop.counter == 1 %}
+                                <i class="fas fa-medal" title="1st place" style="color: gold;"></i>
+                            {% elif forloop.counter == 2 %}
+                                <i class="fas fa-medal" title="2nd place" style="color: silver;"></i>
+                            {% elif forloop.counter == 3 %}
+                                <i class="fas fa-medal" title="3rd place" style="color: #cd7f32;"></i>
+                            {% else %}
+                                <span class="pl-1"> {{ forloop.counter }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-left">{{ ranking.contestant_name }}</td>
+                        <td>{{ ranking.total_score }}</td>
+                        <td>{{ ranking.latest_submission_date }}</td>
+                        <td>{{ ranking.num_submissions_included }}</td>
+                        <td class="text-right">
                         <button class="btn btn-sm btn-info" type="button" data-toggle="collapse" data-target="#collapse{{ ranking.contestant_name|slugify }}" aria-expanded="false" aria-controls="collapse{{ ranking.contestant_name|slugify }}">
                             <i class="fas fa-eye pr-1"></i>
                             Submissions
                         </button>
+                        </td>
+                    </tr>
+                    <tr>
+                    <td colspan="6">
+                        <div class="collapse" id="collapse{{ ranking.contestant_name|slugify }}">
+                            <div class="card card-body">
+                                <ul class="list-group d-flex justify-content-between">
+                                    {% for submission in ranking.submissions %}
+                                        <li class="list-group-item flex-grow-1 text-left">{{ submission.date }}</li>
+                                        <li class="list-group-item flex-grow-2 text-center">{{ submission.competition_name }}</li>
+                                        <li class="list-group-item flex-grow-1 text-right">{{ submission.score }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
                     </td>
                 </tr>
-                <tr>
-                <td colspan="6">
-                    <div class="collapse" id="collapse{{ ranking.contestant_name|slugify }}">
-                        <div class="card card-body">
-                            <ul class="list-group">
-                                {% for submission in ranking.submissions %}
-                                    <li class="list-group-item d-flex justify-content-between">
-                                        <span class="flex-grow-1 text-left">{{ submission.date }}</span>
-                                        <span class="flex-grow-2 text-center">{{ submission.competition_name }}</span>
-                                        <span class="flex-grow-1 text-right">{{ submission.score }}</span>
-                                    </li>
-                                        
-                                    {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                </td>
-            </tr>
             {% endfor %}
         </tbody>
+        {% endif %}
+    </table>
+    </div>
+</body>
+</html>
     </table>
     </div>
 </body>

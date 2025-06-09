@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 import json
 import logging
@@ -29,7 +29,7 @@ def upload_json(request, upload_service: DataParserService = DataParserService()
                 if (ranking):
                     command_service.upsert_ranking(ranking)
 
-            return HttpResponse(f"Uploaded {len(parsed.contestants())} contestants with {len(parsed.submissions())} submissions across {len(parsed.competitions())} competitions.")
+            return redirect('display_scores')
         
         except json.JSONDecodeError as e:
             logger.error(f"Error during JSON upload: {e}", exc_info=True)
