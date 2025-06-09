@@ -43,3 +43,28 @@ This project is a web application that generates a leaderboard based on users' s
 3. **Access the Web Application**
 
    Open `http://localhost:8000` to view the leaderboard.
+
+## Usage
+
+1. Upload a JSON file containing contestant data to update the leaderboard. An example file is located [here](data/scores (1)[13].json).
+2. View the leaderboard at `http://localhost:8000`.
+3. Click the "Show Submissions" button to view the submissions for each contestant.
+
+## Project Structure
+
+- leaderboard app
+  - Contains the main application settings and URL configurations.
+- data app
+  - Database interactions go here
+- display app
+  - Handles the display of the leaderboard and related data.
+- upload app
+  - Handles the upload and processing of score data.
+
+## Database entities
+
+- Contestant: Represents a leaderboard contestant.
+- Competition: Represents a competition.
+- Submission: Represents a contestant's submission in a competition.
+- Ranking: Represents the computed ranking of a contestant.
+- RankingSubmission: Represents the submissions included in a ranking.
