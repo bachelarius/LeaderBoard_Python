@@ -61,6 +61,16 @@ This project is a web application that generates a leaderboard based on users' s
 - upload app
   - Handles the upload and processing of score data.
 
+```mermaid
+graph LR
+    leaderboard[leaderboard app] --> data[data app]
+    leaderboard --> display[display app]
+    leaderboard --> upload[upload app]
+    data --> models[models.py]
+    display --> templates[templates/]
+    upload --> data_parser[data_parser_service.py]
+```
+
 ## Database entities
 
 - Contestant: Represents a leaderboard contestant.
@@ -68,3 +78,41 @@ This project is a web application that generates a leaderboard based on users' s
 - Submission: Represents a contestant's submission in a competition.
 - Ranking: Represents the computed ranking of a contestant.
 - RankingSubmission: Represents the submissions included in a ranking.
+
+```mermaid
+erDiagram
+    Contestant {
+        int id PK
+        string name
+    }
+    Competition {
+        int id PK
+        string name
+    }
+    Submission {
+        int id PK
+        int contestant_id FK
+        int competition_id FK
+        date date
+        int score
+    }
+    Ranking {
+        int id PK
+        int contestant_id FK
+        int total_score
+        date latest_submission_date
+        int num_submissions_included
+    }
+    RankingSubmission {
+        int id PK
+        int ranking_id FK
+        int submission_id FK
+        date submission_date
+    }
+
+    Contestant ||--o{ Submission : contestant
+    Competition ||--o{ Submission : competition
+    Ranking ||--|| Contestant : contestant
+    Ranking ||--o{ RankingSubmission : ranking
+    Submission ||--o{ RankingSubmission : submission
+```
